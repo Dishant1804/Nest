@@ -1,8 +1,8 @@
 import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/react-fontawesome'
 import { useState, useEffect } from 'react'
-import { Tooltip } from 'react-tooltip'
+import { Tooltip } from 'components/ui/tooltip'
 import { CardProps } from 'types/card'
-import { desktopViewMinWidth, tooltipStyle } from 'utils/constants'
+import { desktopViewMinWidth } from 'utils/constants'
 import { Icons } from 'utils/data'
 import { cn } from 'utils/utility'
 import FontAwesomeIconWrapper from 'wrappers/FontAwesomeIconWrapper'
@@ -45,14 +45,14 @@ const Card = ({
         <div className="flex items-center gap-3">
           {/* Display project level badge (if available) */}
           {level && (
-            <span
-              data-tooltip-id="level-tooltip"
-              data-tooltip-content={`${level.level} project`}
-              className={cn('flex h-8 w-8 items-center justify-center rounded-full text-xs shadow')}
-              style={{ backgroundColor: level.color }}
-            >
-              <FontAwesomeIconWrapper icon={level.icon} className="text-white" />
-            </span>
+            <Tooltip id='level-tooltip' content={`${level.level} project`}>
+              <span
+                className={cn('flex h-8 w-8 items-center justify-center rounded-full text-xs shadow')}
+                style={{ backgroundColor: level.color }}
+              >
+                <FontAwesomeIconWrapper icon={level.icon} className="text-white" />
+              </span>
+            </Tooltip>
           )}
           {/* Project title and link */}
           <a href={url} target="_blank" rel="noopener noreferrer" className="flex-1">
@@ -77,7 +77,7 @@ const Card = ({
                   icons={Object.fromEntries(Object.entries(icons).filter(([_, value]) => value))} // only pass in truthy meta data
                   idx={
                     Object.keys(icons).findIndex((e) => e === key) ===
-                    Object.keys(icons).filter((key) => icons[key]).length - 1
+                      Object.keys(icons).filter((key) => icons[key]).length - 1
                       ? -1
                       : Object.keys(icons).findIndex((e) => e === key)
                   }
@@ -161,7 +161,6 @@ const Card = ({
           </div>
         )}
       </div>
-      <Tooltip id="level-tooltip" style={tooltipStyle} />
     </div>
   )
 }
