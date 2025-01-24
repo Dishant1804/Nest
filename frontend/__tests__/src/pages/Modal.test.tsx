@@ -1,6 +1,7 @@
+import { ChakraProvider } from '@chakra-ui/react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { ChakraProvider } from '@chakra-ui/react'
+import React from 'react'
 import { system } from 'utils/theme'
 
 import { Modal } from 'components/Modal'

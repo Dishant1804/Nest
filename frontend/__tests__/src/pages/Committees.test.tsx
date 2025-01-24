@@ -1,7 +1,7 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom' // Import MemoryRouter
-
 import { fetchAlgoliaData } from 'api/fetchAlgoliaData'
+import { MemoryRouter } from 'react-router-dom'
+
 import { useNavigate } from 'react-router-dom'
 import { render } from 'wrappers/testUtil'
 
