@@ -1,15 +1,15 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react'
-
+import { MemoryRouter } from 'react-router-dom'
 import { fetchAlgoliaData } from 'api/fetchAlgoliaData'
 import { useNavigate } from 'react-router-dom'
 import { render } from 'wrappers/testUtil'
-
 import ProjectsPage from 'pages/Projects'
 import { mockProjectData } from '@tests/data/mockProjectData'
 
 jest.mock('api/fetchAlgoliaData', () => ({
   fetchAlgoliaData: jest.fn(),
 }))
+
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: jest.fn(),
@@ -36,7 +36,11 @@ describe('ProjectPage Component', () => {
   })
 
   test('renders loading spinner initially', async () => {
-    render(<ProjectsPage />)
+    render(
+      <MemoryRouter>
+        <ProjectsPage />
+      </MemoryRouter>
+    )
     const loadingSpinner = screen.getAllByAltText('Loading indicator')
     await waitFor(() => {
       expect(loadingSpinner.length).toBeGreaterThan(0)
@@ -50,7 +54,11 @@ describe('ProjectPage Component', () => {
       totalPages: 2,
     })
 
-    render(<ProjectsPage />)
+    render(
+      <MemoryRouter>
+        <ProjectsPage />
+      </MemoryRouter>
+    )
 
     const loadingSpinner = screen.getAllByAltText('Loading indicator')
     await waitFor(() => {
@@ -67,7 +75,11 @@ describe('ProjectPage Component', () => {
   })
 
   test('renders project data correctly', async () => {
-    render(<ProjectsPage />)
+    render(
+      <MemoryRouter>
+        <ProjectsPage />
+      </MemoryRouter>
+    )
     await waitFor(() => {
       expect(screen.getByText('Project 1')).toBeInTheDocument()
     })
@@ -83,7 +95,11 @@ describe('ProjectPage Component', () => {
       hits: [],
       totalPages: 0,
     })
-    render(<ProjectsPage />)
+    render(
+      <MemoryRouter>
+        <ProjectsPage />
+      </MemoryRouter>
+    )
     await waitFor(() => {
       expect(screen.getByText('No projects found')).toBeInTheDocument()
     })
@@ -95,7 +111,11 @@ describe('ProjectPage Component', () => {
       hits: mockProjectData.projects,
       totalPages: 2,
     })
-    render(<ProjectsPage />)
+    render(
+      <MemoryRouter>
+        <ProjectsPage />
+      </MemoryRouter>
+    )
     await waitFor(() => {
       const nextPageButton = screen.getByText('Next Page')
       fireEvent.click(nextPageButton)
@@ -106,11 +126,15 @@ describe('ProjectPage Component', () => {
     })
   })
 
-  test('opens  window on View Details button click', async () => {
+  test('opens window on View Details button click', async () => {
     const navigateMock = jest.fn()
     ;(useNavigate as jest.Mock).mockReturnValue(navigateMock)
 
-    render(<ProjectsPage />)
+    render(
+      <MemoryRouter>
+        <ProjectsPage />
+      </MemoryRouter>
+    )
 
     await waitFor(() => {
       const contributeButton = screen.getByText('View Details')

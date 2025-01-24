@@ -1,11 +1,13 @@
+import { HStack, Link } from '@chakra-ui/react'
 import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/react-fontawesome'
 import { useState, useEffect } from 'react'
-import { Tooltip } from 'components/ui/tooltip'
 import { CardProps } from 'types/card'
 import { desktopViewMinWidth } from 'utils/constants'
 import { Icons } from 'utils/data'
+import { TooltipRecipe } from 'utils/theme'
 import { cn } from 'utils/utility'
 import FontAwesomeIconWrapper from 'wrappers/FontAwesomeIconWrapper'
+import { Tooltip } from '@/components/ui/tooltip'
 import ActionButton from 'components/ActionButton'
 import ContributorAvatar from 'components/ContributorAvatar'
 import DisplayIcon from 'components/DisplayIcon'
@@ -45,9 +47,18 @@ const Card = ({
         <div className="flex items-center gap-3">
           {/* Display project level badge (if available) */}
           {level && (
-            <Tooltip id='level-tooltip' content={`${level.level} project`}>
+            <Tooltip
+              id="level-tooltip"
+              content={`${level.level} project`}
+              openDelay={100}
+              closeDelay={100}
+              recipe={TooltipRecipe}
+              showArrow
+            >
               <span
-                className={cn('flex h-8 w-8 items-center justify-center rounded-full text-xs shadow')}
+                className={cn(
+                  'flex h-8 w-8 items-center justify-center rounded-full text-xs shadow'
+                )}
                 style={{ backgroundColor: level.color }}
               >
                 <FontAwesomeIconWrapper icon={level.icon} className="text-white" />
@@ -55,7 +66,7 @@ const Card = ({
             </Tooltip>
           )}
           {/* Project title and link */}
-          <a href={url} target="_blank" rel="noopener noreferrer" className="flex-1">
+          <Link href={url} target="_blank" rel="noopener noreferrer" className="flex-1">
             <h1
               className="max-w-full break-words text-base font-semibold dark:text-sky-600 sm:break-normal sm:text-lg lg:text-2xl"
               style={{
@@ -64,7 +75,7 @@ const Card = ({
             >
               {title}
             </h1>
-          </a>
+          </Link>
         </div>
         {/* Icons associated with the project */}
         <div className="flex min-w-[30%] flex-grow flex-row items-center justify-end overflow-auto">
@@ -77,7 +88,7 @@ const Card = ({
                   icons={Object.fromEntries(Object.entries(icons).filter(([_, value]) => value))} // only pass in truthy meta data
                   idx={
                     Object.keys(icons).findIndex((e) => e === key) ===
-                      Object.keys(icons).filter((key) => icons[key]).length - 1
+                    Object.keys(icons).filter((key) => icons[key]).length - 1
                       ? -1
                       : Object.keys(icons).findIndex((e) => e === key)
                   }
@@ -88,9 +99,9 @@ const Card = ({
       </div>
       {/* Link to project name if provided */}
       {projectName && (
-        <a href={projectLink} rel="noopener noreferrer" className="mt-2 font-medium">
+        <Link href={projectLink} rel="noopener noreferrer" className="mt-2 font-medium">
           {projectName}
-        </a>
+        </Link>
       )}
       {/* Render project summary using Markdown */}
       <Markdown content={summary} className="py-2 pr-4 text-gray-600 dark:text-gray-300" />
@@ -135,19 +146,21 @@ const Card = ({
             >
               {/* Render social links if available */}
               {social && social.length > 0 && (
-                <div id="social" className="mt-2 flex items-center gap-3">
+                <HStack id="social" mt={2}>
                   {social.map((item) => (
-                    <a
+                    <Link
                       key={`${item.title}-${item.url}`}
                       href={item.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2"
+                      display="flex"
+                      alignItems="center"
+                      gap={2}
                     >
                       <FontAwesomeIcon icon={item.icon as FontAwesomeIconProps['icon']} />
-                    </a>
+                    </Link>
                   ))}
-                </div>
+                </HStack>
               )}
 
               {/* Action Button */}

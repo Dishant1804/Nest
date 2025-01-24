@@ -1,4 +1,5 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import { fetchAlgoliaData } from 'api/fetchAlgoliaData'
 import { useNavigate } from 'react-router-dom'
 import { render } from 'wrappers/testUtil'
@@ -40,7 +41,11 @@ describe('UsersPage Component', () => {
   })
 
   test('renders loading spinner initially', async () => {
-    render(<UsersPage />)
+    render(
+      <MemoryRouter>
+        <UsersPage />
+      </MemoryRouter>
+    )
     const loadingSpinner = screen.getAllByAltText('Loading indicator')
     await waitFor(() => {
       expect(loadingSpinner.length).toBeGreaterThan(0)
@@ -49,7 +54,11 @@ describe('UsersPage Component', () => {
 
   test('renders SearchBar, user cards, and pagination after data is loaded', async () => {
     window.scrollTo = jest.fn()
-    render(<UsersPage />)
+    render(
+      <MemoryRouter>
+        <UsersPage />
+      </MemoryRouter>
+    )
 
     // Check loading state
     const loadingSpinner = screen.getAllByAltText('Loading indicator')
@@ -69,7 +78,11 @@ describe('UsersPage Component', () => {
   })
 
   test('renders user cards correctly', async () => {
-    render(<UsersPage />)
+    render(
+      <MemoryRouter>
+        <UsersPage />
+      </MemoryRouter>
+    )
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument()
@@ -88,7 +101,11 @@ describe('UsersPage Component', () => {
       totalPages: 0,
     })
 
-    render(<UsersPage />)
+    render(
+      <MemoryRouter>
+        <UsersPage />
+      </MemoryRouter>
+    )
 
     await waitFor(() => {
       expect(screen.getByText('No Users found')).toBeInTheDocument()
@@ -98,7 +115,11 @@ describe('UsersPage Component', () => {
   test('handles page change correctly', async () => {
     window.scrollTo = jest.fn()
 
-    render(<UsersPage />)
+    render(
+      <MemoryRouter>
+        <UsersPage />
+      </MemoryRouter>
+    )
 
     await waitFor(() => {
       const nextPageButton = screen.getByText('Next Page')
@@ -115,7 +136,11 @@ describe('UsersPage Component', () => {
     const navigateMock = jest.fn()
     ;(useNavigate as jest.Mock).mockReturnValue(navigateMock)
 
-    render(<UsersPage />)
+    render(
+      <MemoryRouter>
+        <UsersPage />
+      </MemoryRouter>
+    )
 
     await waitFor(() => {
       const viewDetailsButtons = screen.getAllByText('View Profile')
@@ -125,6 +150,7 @@ describe('UsersPage Component', () => {
 
     expect(navigateMock).toHaveBeenCalledWith('/community/users/user_1')
   })
+
   test('renders fallback username if user name is missing', async () => {
     ;(fetchAlgoliaData as jest.Mock).mockResolvedValue({
       hits: [
@@ -138,7 +164,11 @@ describe('UsersPage Component', () => {
       totalPages: 1,
     })
 
-    render(<UsersPage />)
+    render(
+      <MemoryRouter>
+        <UsersPage />
+      </MemoryRouter>
+    )
 
     await waitFor(() => {
       expect(screen.getByText('@fallback_login')).toBeInTheDocument()

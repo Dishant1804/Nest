@@ -1,4 +1,5 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom' // Import MemoryRouter
 
 import { fetchAlgoliaData } from 'api/fetchAlgoliaData'
 import { useNavigate } from 'react-router-dom'
@@ -37,7 +38,11 @@ describe('Committees Component', () => {
   })
 
   test('renders loading spinner initially', async () => {
-    render(<CommitteesPage />)
+    render(
+      <MemoryRouter>
+        <CommitteesPage />
+      </MemoryRouter>
+    )
     const loadingSpinner = screen.getAllByAltText('Loading indicator')
     await waitFor(() => {
       expect(loadingSpinner.length).toBeGreaterThan(0)
@@ -51,7 +56,11 @@ describe('Committees Component', () => {
       totalPages: 2,
     })
 
-    render(<CommitteesPage />)
+    render(
+      <MemoryRouter>
+        <CommitteesPage />
+      </MemoryRouter>
+    )
 
     const loadingSpinner = screen.getAllByAltText('Loading indicator')
     await waitFor(() => {
@@ -69,7 +78,11 @@ describe('Committees Component', () => {
   })
 
   test('renders committee data correctly', async () => {
-    render(<CommitteesPage />)
+    render(
+      <MemoryRouter>
+        <CommitteesPage />
+      </MemoryRouter>
+    )
 
     await waitFor(() => {
       expect(screen.getByText('Committee 1')).toBeInTheDocument()
@@ -84,7 +97,11 @@ describe('Committees Component', () => {
       hits: [],
       totalPages: 0,
     })
-    render(<CommitteesPage />)
+    render(
+      <MemoryRouter>
+        <CommitteesPage />
+      </MemoryRouter>
+    )
     await waitFor(() => {
       expect(screen.getByText('No committees found')).toBeInTheDocument()
     })
@@ -96,7 +113,11 @@ describe('Committees Component', () => {
       hits: mockCommitteeData.committees,
       totalPages: 2,
     })
-    render(<CommitteesPage />)
+    render(
+      <MemoryRouter>
+        <CommitteesPage />
+      </MemoryRouter>
+    )
     await waitFor(() => {
       const nextPageButton = screen.getByText('Next Page')
       fireEvent.click(nextPageButton)
@@ -112,17 +133,25 @@ describe('Committees Component', () => {
       hits: mockCommitteeData.committees,
       totalPages: 1,
     })
-    render(<CommitteesPage />)
+    render(
+      <MemoryRouter>
+        <CommitteesPage />
+      </MemoryRouter>
+    )
     await waitFor(() => {
       expect(screen.queryByText('Next Page')).not.toBeInTheDocument()
     })
   })
 
-  test('opens  window on View Details button click', async () => {
+  test('opens window on View Details button click', async () => {
     const navigateMock = jest.fn()
     ;(useNavigate as jest.Mock).mockReturnValue(navigateMock)
 
-    render(<CommitteesPage />)
+    render(
+      <MemoryRouter>
+        <CommitteesPage />
+      </MemoryRouter>
+    )
 
     await waitFor(() => {
       const contributeButton = screen.getByText('View Details')

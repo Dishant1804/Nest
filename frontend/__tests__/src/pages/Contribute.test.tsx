@@ -1,11 +1,9 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
-
-import { fetchAlgoliaData } from 'api/fetchAlgoliaData'
+import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-
+import { fetchAlgoliaData } from 'api/fetchAlgoliaData'
 import ContributePage from 'pages/Contribute'
-
 import { mockContributeData } from '@tests/data/mockContributeData'
+import { render } from 'wrappers/testUtil' // Use your custom render function
 
 jest.mock('api/fetchAlgoliaData', () => ({
   fetchAlgoliaData: jest.fn(),
@@ -99,6 +97,7 @@ describe('Contribute Component', () => {
       behavior: 'auto',
     })
   })
+
   test('handles pagination for first page', async () => {
     ;(fetchAlgoliaData as jest.Mock).mockResolvedValue({
       ...mockContributeData,
@@ -285,7 +284,7 @@ describe('Contribute Component', () => {
       expect(screen.getByText('Hint 1')).toBeInTheDocument()
     })
 
-    //verify first issue button
+    // Verify first issue button
     await waitFor(() => {
       const viewIssueButton = screen.getByRole('button', { name: 'View Issue' })
       expect(viewIssueButton).toBeInTheDocument()

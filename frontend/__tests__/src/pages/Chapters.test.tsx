@@ -1,9 +1,8 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react'
-
+import { MemoryRouter } from 'react-router-dom'
 import { fetchAlgoliaData } from 'api/fetchAlgoliaData'
 import { useNavigate } from 'react-router-dom'
 import { render } from 'wrappers/testUtil'
-
 import ChaptersPage from 'pages/Chapters'
 import { mockChapterData } from '@tests/data/mockChapterData'
 
@@ -15,6 +14,7 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: jest.fn(),
 }))
+
 jest.mock('components/Pagination', () =>
   jest.fn(({ currentPage, onPageChange }) => (
     <div>
@@ -36,7 +36,11 @@ describe('ChaptersPage Component', () => {
   })
 
   test('renders loading spinner initially', async () => {
-    render(<ChaptersPage />)
+    render(
+      <MemoryRouter>
+        <ChaptersPage />
+      </MemoryRouter>
+    )
     const loadingSpinner = screen.getAllByAltText('Loading indicator')
     await waitFor(() => {
       expect(loadingSpinner.length).toBeGreaterThan(0)
@@ -44,7 +48,11 @@ describe('ChaptersPage Component', () => {
   })
 
   test('renders chapter data correctly', async () => {
-    render(<ChaptersPage />)
+    render(
+      <MemoryRouter>
+        <ChaptersPage />
+      </MemoryRouter>
+    )
     await waitFor(() => {
       expect(screen.getByText('Chapter 1')).toBeInTheDocument()
     })
@@ -55,7 +63,11 @@ describe('ChaptersPage Component', () => {
 
   test('displays "No chapters found" when there are no chapters', async () => {
     ;(fetchAlgoliaData as jest.Mock).mockResolvedValue({ hits: [], totalPages: 0 })
-    render(<ChaptersPage />)
+    render(
+      <MemoryRouter>
+        <ChaptersPage />
+      </MemoryRouter>
+    )
     await waitFor(() => {
       expect(screen.getByText('No chapters found')).toBeInTheDocument()
     })
@@ -67,7 +79,11 @@ describe('ChaptersPage Component', () => {
       hits: mockChapterData.chapters,
       totalPages: 2,
     })
-    render(<ChaptersPage />)
+    render(
+      <MemoryRouter>
+        <ChaptersPage />
+      </MemoryRouter>
+    )
     await waitFor(() => {
       const nextPageButton = screen.getByText('Next Page')
       fireEvent.click(nextPageButton)
@@ -84,7 +100,11 @@ describe('ChaptersPage Component', () => {
       hits: mockChapterData.chapters,
       totalPages: 2,
     })
-    render(<ChaptersPage />)
+    render(
+      <MemoryRouter>
+        <ChaptersPage />
+      </MemoryRouter>
+    )
 
     const loadingSpinner = screen.getAllByAltText('Loading indicator')
     await waitFor(() => {
@@ -99,11 +119,16 @@ describe('ChaptersPage Component', () => {
 
     expect(screen.queryByAltText('Loading indicator')).not.toBeInTheDocument()
   })
-  test('opens  window on View Details button click', async () => {
+
+  test('opens window on View Details button click', async () => {
     const navigateMock = jest.fn()
     ;(useNavigate as jest.Mock).mockReturnValue(navigateMock)
 
-    render(<ChaptersPage />)
+    render(
+      <MemoryRouter>
+        <ChaptersPage />
+      </MemoryRouter>
+    )
 
     await waitFor(() => {
       const contributeButton = screen.getByText('View Details')

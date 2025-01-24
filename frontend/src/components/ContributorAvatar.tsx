@@ -1,16 +1,20 @@
-import { Tooltip } from 'components/ui/tooltip';
-import { topContributorsType } from 'types/contributor';
+import { Link } from '@chakra-ui/react'
+import { topContributorsType } from 'types/contributor'
+import { Tooltip } from 'components/ui/tooltip'
 
 const ContributorAvatar = ({ contributor }: { contributor: topContributorsType }) => {
-  const displayName = contributor.name || contributor.login;
+  const displayName = contributor.name || contributor.login
 
   return (
     <Tooltip
       id={`avatar-tooltip-${contributor.login}`}
       content={`${contributor.contributions_count} contributions by ${displayName}`}
-      
+      openDelay={100}
+      closeDelay={100}
+      showArrow
+      positioning={{ placement: 'top' }}
     >
-      <a
+      <Link
         href={`/community/users/${contributor.login}`}
         target="_blank"
         rel="noopener noreferrer"
@@ -20,9 +24,9 @@ const ContributorAvatar = ({ contributor }: { contributor: topContributorsType }
           src={contributor.avatar_url}
           alt={`${displayName}'s avatar`}
         />
-      </a>
+      </Link>
     </Tooltip>
-  );
-};
+  )
+}
 
-export default ContributorAvatar;
+export default ContributorAvatar

@@ -1,10 +1,14 @@
-import { render } from '@testing-library/react'
-import { ReactNode } from 'react'
-import { BrowserRouter } from 'react-router-dom'
+import { render as rtlRender } from '@testing-library/react'
+import { ChakraProvider } from '@chakra-ui/react'
+import { system } from 'utils/theme'
 
-const customRender = (ui: ReactNode) => {
-  return render(<BrowserRouter>{ui}</BrowserRouter>)
+function render(ui: React.ReactElement, options = {}) {
+  return rtlRender(ui, {
+    wrapper: ({ children }) => <ChakraProvider value={system}>{children}</ChakraProvider>,
+    ...options,
+  })
 }
 
 export * from '@testing-library/react'
-export { customRender as render }
+
+export { render }
