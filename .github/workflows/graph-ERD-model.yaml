@@ -1,0 +1,51 @@
+name: Generate Model Relations Diagram
+
+on:
+  push:
+    paths:
+      - 'backend/apps/**/models/*.py'
+  workflow_dispatch:
+
+jobs:
+  generate-diagram:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Poetry
+        run: pipx install poetry
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          cache: poetry
+          cache-dependency-path: backend/poetry.lock
+          python-version: '3.13'
+
+      - name: Configure Poetry
+        run: |
+          echo "$HOME/.poetry/bin" >> $GITHUB_PATH
+          poetry config virtualenvs.create false
+
+      - name: Install dependencies
+        run: poetry install --no-interaction --no-root
+
+      - name: Install graphviz
+        run: sudo apt-get install -y graphviz
+
+      - name: Generate model diagram
+        run: |
+          poetry run python backend/manage.py graph_models \
+            --pygraphviz \
+            --all-applications \
+            --group-models \
+            --output backend/models.png
+
+      - name: Upload diagram as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: models-diagram
+          path: backend/models.png
+          retention-days: 7
