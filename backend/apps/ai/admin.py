@@ -11,9 +11,9 @@ class ChunkAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "text",
-        "content_type",
+        "context",
     )
-    search_fields = ("text", "object_id")
+    search_fields = ("text",)
 
 
 admin.site.register(Chunk, ChunkAdmin)
